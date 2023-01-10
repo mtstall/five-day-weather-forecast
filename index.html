@@ -5,8 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <!-- Why does the `<link>` to `style.css` have to come last? -->
-  <!--the style has to come last because style.css references styles in earlier links (fontawesome library)-->
   <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
   <link rel="stylesheet" href="./assets/css/style.css" />
@@ -27,7 +25,7 @@
       <div class="card">
         <h3 class="card-header text-uppercase">Search for a City:</h3>
         <form id="user-form" class="card-body">
-            <label class="form-label" for="cityname">City</label>
+          <label class="form-label" for="cityname">City</label>
           <input name="location" id="location" type="text" autofocus="true" class="form-input" />
           <button type="submit" class="btn">Search</button>
         </form>
@@ -35,25 +33,13 @@
 
       <div class="card">
         <div id="location-buttons" class="card-body">
-          <!-- TODO: How are the `data-language` attributes being used? -->
-          <!--data-language attributes are used to differentiate/filter what comes back from the fetch-->
-          <button location="atlanta" state = "ga" country="us" class="btn">Atlanta</button>
-          <button location="denver" state = "co" country="us" class="btn">Denver</button>
-          <button location="seattle" state = "wa" country="us" class="btn">Seattle</button>
-          <button location="san francisco" state = "ca" country="us" class="btn">San Francisco</button>
-          <button location="orlando" state = "fl" country="us" class="btn">Orlando</button>
-          <button location="new york" state = "ny" country="us" class="btn">New York</button>
-          <button location="chicago" state = "il" country="us" class="btn">Chicago</button>
-          <button location="austin" state = "tx" country="us" class="btn">Austin</button>
         </div>
       </div>
     </div>
 
     <div class="col-12 col-md-8">
-      <!-- TODO: Why is this `<div>` empty? What goes in here? -->
-        <!--this div is empty because it will be populated via javascript. This filtered list of repositories will go here.-->
         <h2 class="subtitle">Showing Weather for:<span id="location-search-term"></span></h2>
-        <div id="weather-container" class="list-group"></div>
+        <div id="weather-container" class="list-group flex-row"></div>
     </div>
   </main>
 

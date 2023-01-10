@@ -1,9 +1,9 @@
 :root {
-    --primary: #ccdad1;
-    --secondary: #9caea9;
+    --primary: #ffffff;
+    --secondary: #638edf;
     --tertiary: #788585;
-    --light-dark: #6f6866;
-    --dark: #38302e;
+    --light-dark: rgb(150, 150, 150);
+    --dark: #2729af;
     --border-radius: 0.3rem;
   }
   
@@ -40,6 +40,15 @@
   
   p {
     font-size: 1.2rem;
+  }
+
+  img {
+    display: block;
+  }
+
+  span {
+    font-weight: bold;
+    font-size: large;
   }
   
   .btn {
@@ -124,6 +133,7 @@
     background-color: var(--light-dark);
     color: var(--primary);
     text-decoration: none;
+    border-style: solid;
   }
   
   .list-item:hover {

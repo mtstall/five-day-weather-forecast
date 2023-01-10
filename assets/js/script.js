@@ -1,7 +1,7 @@
 var locationButtonsEl = document.querySelector('#location-buttons');
 var cityInputEl = document.querySelector('#location');
 var weatherContainerEl = document.querySelector('#weather-container');
-var locationSearchTerm = document.querySelector('#repo-search-term');
+var locationSearchTerm = document.querySelector('#location-search-term');
 var userFormEl = document.querySelector('#user-form');
 var APIKey = "de4c96943a87ee4923b2f54456073d16";
 //var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
@@ -12,41 +12,74 @@ var formSubmitHandler = function(event) {
     var city = cityInputEl.value.trim();
 
     if (city) {
-        console.log(city);
+        localStorage.setItem("city",city);
         getWeatherInfo(city);
+        renderCity();
         weatherContainerEl.textContent = '';
-        cityInputEl.textContent = '';
+        cityInputEl.value = '';
     } else {
         alert('Please enter a city');
     }
 }
 
-//returns the city the user clicked from location buttons options
-var buttonClickHandler = function (event) {
-    var city = event.target.getAttribute('location');
-    var state = event.target.getAttribute('state');
-    var country = event.target.getAttribute('country');
-    console.log(city);
-    console.log(state);
-    console.log(country);
-    //come back to add if statement here
-    if (city) {
-        getWeatherInfo(city);
-        weatherContainerEl.textContent = '';
+var buttonClickHandler = function(event) {
+    var clickedCity = event.target.getAttribute('id');
+    console.log(clickedCity);
+    getWeatherInfo(clickedCity);
+    weatherContainerEl.textContent = '';
+}
+
+var renderCity = function() {
+    var cityEl = document.createElement('button');
+    var cityElText = localStorage.getItem('city');
+    if (cityElText) {
+        cityEl.textContent = cityElText.toUpperCase();
+        cityEl.classList = 'btn';
+        cityEl.setAttribute('id',cityElText);
+        locationButtonsEl.appendChild(cityEl);
     }
 }
 
-var getWeatherInfo = function (city,state,country) {
-    var apiUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city +"," + state + "," + country + "&appid=" + APIKey;
+renderCity();
+
+var getWeatherInfo = function (city) {
+    var apiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + APIKey;
 
     fetch(apiUrl).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
-                var lon = data.coord.lon;
-                var lat = data.coord.lat;
-                console.log("latitude: "+lat);
-                displayWeather(data, city);
+                if (data) {
+                    for (var i = 0; i < data.list.length; i+=8) {
+                        var forecastEl = document.createElement('div');
+                        forecastEl.classList = 'list-item flex-column align-center';
 
+                        var titleEl = document.createElement('span');
+                        var date = data['list'][i]['dt_txt']
+                        var dateSplit = date.split(" ",1);
+                        titleEl.textContent = dateSplit;
+
+                        forecastEl.appendChild(titleEl);
+
+                        var icon = data.list[i].weather[0].icon;
+                        var iconEl = document.createElement('img');
+                        iconEl.src = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+
+                        var tempEl = document.createElement('p');
+                        tempEl.textContent = "Temp: " + data['list'][i]['main']['temp'] + " °F";
+
+                        var windEl = document.createElement('p');
+                        windEl.textContent = "Wind: " + data['list'][i]['wind']['speed'] + " MPH";
+
+                        var humidityEl = document.createElement('p');
+                        humidityEl.textContent = "Humidity: " + data['list'][i]['main']['humidity'] +"%";
+
+                        forecastEl.appendChild(iconEl);
+                        forecastEl.appendChild(tempEl);
+                        forecastEl.appendChild(windEl);
+                        forecastEl.appendChild(humidityEl);
+                        weatherContainerEl.appendChild(forecastEl);
+                }
+                }
             });
         } else {
             alert('Error: ' + response.statusText);
@@ -54,32 +87,5 @@ var getWeatherInfo = function (city,state,country) {
     });
 }
 
-var displayWeather = function (location, searchTerm) {
-    if (location.length === 0) {
-        weatherContainerEl.textContent = 'No data found.';
-        return;
-    }
-    //locationSearchTerm.textContent = searchTerm;
-
-    for (var i = 0; i < location.length; i++) {
-        var lat = location[i].coord.lat;
-        var lon = location[i].coord.lon;
-    }
-
-}
-
+locationButtonsEl.addEventListener('click', buttonClickHandler);
 userFormEl.addEventListener('submit', formSubmitHandler);
-locationButtonsEl.addEventListener('click',buttonClickHandler);
-
-
-//testing API - delete later
-var requestURL = "http://api.openweathermap.org/data/2.5/weather?q=atlanta,georgia,us&limit=5&appid=" + APIKey;
-
-fetch(requestURL)
-.then(function (response) {
-    return response.json();
-})
-.then (function (data) {
-    console.log(data);
-    console.log(data.coord.lon);
-});
