@@ -211,13 +211,19 @@
   /* FLEX CONTENT */
   .flex-row {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
   }
   
   .flex-column {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+  }
+
+  .list-item.flex-column.justify-space-between.align-center {
+    width: 100%;
+    color: black;
+    background-color: white;
   }
   
   .justify-space-between {
