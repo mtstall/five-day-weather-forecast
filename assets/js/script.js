@@ -16,10 +16,10 @@ var formSubmitHandler = function (event) {
 
   //validation if statement
   if (city) {
-    localStorage.setItem("city"+index, city);
-    index++;
+    localStorage.setItem("city" + index, city);
     getWeatherInfo(city);
-    renderCity();
+    renderCity(city);
+    index++;
     weatherContainerEl.textContent = "";
     todayContainerEl.textContent = "";
     forecastTitleEl.textContent = "";
@@ -41,10 +41,30 @@ var buttonClickHandler = function (event) {
 };
 
 //function to create button elements that persist on the page for cities user has searched
-var renderCity = function () {
-  var cityEl = document.createElement("button");
-  var cityElText = localStorage.getItem("city"+index);
-  if (cityElText) {
+var renderCity = function (city) {
+  //max number of cities to render on new page load
+  maxStoredCities = 9;
+  //if city is undefined (i.e. on a new page load), run this code
+  if (!city) {
+    for (var i = 0; i < maxStoredCities; i++) {
+      var cityElText = localStorage.getItem("city" + i);
+      //if there aren't 10 saved cities in local storage, break out of the function
+      if (!cityElText) {
+        return;
+        //otherwise, pull all saved cities from local storage and render them to the page
+      } else {
+        var cityEl = document.createElement("button");
+        cityEl.textContent = cityElText.toUpperCase();
+        cityEl.classList = "btn";
+        cityEl.setAttribute("id", cityElText);
+        locationButtonsEl.appendChild(cityEl);
+      }
+    }
+  }
+  //if city is defined (i.e. user entered in a city name), run this code
+  else if (city) {
+    var cityEl = document.createElement("button");
+    var cityElText = localStorage.getItem("city" + index);
     cityEl.textContent = cityElText.toUpperCase();
     cityEl.classList = "btn";
     cityEl.setAttribute("id", cityElText);
@@ -115,7 +135,6 @@ var getWeatherInfo = function (city) {
     if (response.ok) {
       response.json().then(function (data) {
         if (data) {
-            console.log(data);
           //creating elements for forecast data
           var forecastTitle = document.createElement("h2");
           forecastTitle.textContent = "5-day Forecast";
@@ -129,7 +148,12 @@ var getWeatherInfo = function (city) {
             var date = data["list"][i]["dt_txt"];
             var dateSplitSpace = date.split(" ", 1);
             var dateSplitHyphen = dateSplitSpace[0].split("-");
-            var dateFormat = dateSplitHyphen[1]+"/"+dateSplitHyphen[2]+"/"+dateSplitHyphen[0];
+            var dateFormat =
+              dateSplitHyphen[1] +
+              "/" +
+              dateSplitHyphen[2] +
+              "/" +
+              dateSplitHyphen[0];
             titleEl.textContent = dateFormat;
             forecastEl.appendChild(titleEl);
 
