@@ -6,6 +6,7 @@ var locationSearchTerm = document.querySelector("#location-search-term");
 var userFormEl = document.querySelector("#user-form");
 var forecastTitleEl = document.querySelector("#forecast-title");
 var APIKey = "de4c96943a87ee4923b2f54456073d16";
+var index = 0;
 
 //function to handle form submit
 var formSubmitHandler = function (event) {
@@ -15,7 +16,8 @@ var formSubmitHandler = function (event) {
 
   //validation if statement
   if (city) {
-    localStorage.setItem("city", city);
+    localStorage.setItem("city"+index, city);
+    index++;
     getWeatherInfo(city);
     renderCity();
     weatherContainerEl.textContent = "";
@@ -41,7 +43,7 @@ var buttonClickHandler = function (event) {
 //function to create button elements that persist on the page for cities user has searched
 var renderCity = function () {
   var cityEl = document.createElement("button");
-  var cityElText = localStorage.getItem("city");
+  var cityElText = localStorage.getItem("city"+index);
   if (cityElText) {
     cityEl.textContent = cityElText.toUpperCase();
     cityEl.classList = "btn";
