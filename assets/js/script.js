@@ -113,6 +113,7 @@ var getWeatherInfo = function (city) {
     if (response.ok) {
       response.json().then(function (data) {
         if (data) {
+            console.log(data);
           //creating elements for forecast data
           var forecastTitle = document.createElement("h2");
           forecastTitle.textContent = "5-day Forecast";
